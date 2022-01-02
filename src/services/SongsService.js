@@ -24,18 +24,17 @@ class SongsService {
     const params = [];
 
     if (title) {
-      params.push(`title = '${title}'`);
+      params.push(`title ~* '${title}'`);
     }
 
     if (performer) {
-      params.push(`performer = '${performer}'`);
+      params.push(`performer ~* '${performer}'`);
     }
 
     if (params.length !== 0) {
       const condition = params.join(' AND ');
       query += ` WHERE ${condition}`;
     }
-    console.log(query);
     const result = await this._pool.query(query);
     const songs = result.rows;
     return songs;

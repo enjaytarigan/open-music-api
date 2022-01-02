@@ -25,10 +25,10 @@ class SongsHandler {
       response.code(201);
       return response;
     } catch (error) {
-      console.log(error);
       if (error instanceof ClientError) {
         const response = h.response({
           status: 'fail',
+          message: error.message,
         });
         response.code(error.statusCode);
         return response;
@@ -46,16 +46,16 @@ class SongsHandler {
     try {
       const songs = await this._service.getSongs(request.query);
       return {
-        message: 'success',
+        status: 'success',
         data: {
           songs,
         },
       };
     } catch (error) {
-      console.log(error);
       if (error instanceof ClientError) {
         const response = h.response({
           status: 'fail',
+          message: error.message,
         });
         response.code(error.statusCode);
         return response;
@@ -83,6 +83,7 @@ class SongsHandler {
       if (error instanceof ClientError) {
         const response = h.response({
           status: 'fail',
+          message: error.message,
         });
         response.code(error.statusCode);
         return response;
