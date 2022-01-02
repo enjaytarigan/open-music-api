@@ -35,7 +35,7 @@ class AlbumsHandler {
         return response;
       }
       const response = h.response({
-        status: 'fail',
+        status: 'error',
         message: 'Internal Server Error',
       });
       response.code(500);
@@ -63,7 +63,7 @@ class AlbumsHandler {
         return response;
       }
       const response = h.response({
-        status: 'fail',
+        status: 'error',
         message: 'Internal Server Error',
       });
       response.code(500);
@@ -91,7 +91,7 @@ class AlbumsHandler {
         return response;
       }
       const response = h.response({
-        status: 'fail',
+        status: 'error',
         message: 'Internal Server Error',
       });
       response.code(500);
@@ -116,7 +116,7 @@ class AlbumsHandler {
         return response;
       }
       const response = h.response({
-        status: 'fail',
+        status: 'error',
         message: 'Internal Server Error',
       });
       response.code(500);
