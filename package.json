@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "migrate": "node-pg-migrate"
+    "migrate": "node-pg-migrate",
+    "start-dev": "npx nodemon ./src/server.js",
+    "lint": "eslint ./src"
   },
   "repository": {
     "type": "git",
