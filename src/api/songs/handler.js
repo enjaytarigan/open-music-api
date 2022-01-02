@@ -1,35 +1,34 @@
 const ClientError = require('../../exceptions/ClientError');
 
-class AlbumsHandler {
+class SongsHandler {
   constructor(service, validator) {
     this._service = service;
     this._validator = validator;
-    this.postAlbumHandler = this.postAlbumHandler.bind(this);
-    this.getAlbumByIdHandler = this.getAlbumByIdHandler.bind(this);
-    this.putAlbumByIdHandler = this.putAlbumByIdHandler.bind(this);
-    this.deleteAlbumByIdHandler = this.deleteAlbumByIdHandler.bind(this);
+    this.postSongHandler = this.postSongHandler.bind(this);
+    this.getAllSongsHandler = this.getAllSongsHandler.bind(this);
+    this.getSongByIdHandler = this.getSongByIdHandler.bind(this);
+    this.putSongByIdHandler = this.putSongByIdHandler.bind(this);
+    this.deleteSongByIdHandler = this.deleteSongByIdHandler.bind(this);
   }
 
-  async postAlbumHandler(request, h) {
+  async postSongHandler(request, h) {
+    const { payload } = request;
     try {
-      const { payload } = request;
-      await this._validator.validateAlbumPayload(payload);
-
-      const { name, year } = payload;
-      const albumId = await this._service.addAlbum({ name, year });
+      await this._validator.validateSongPayload(payload);
+      const songId = await this._service.addSong(payload);
       const response = h.response({
         status: 'success',
         data: {
-          albumId,
+          songId,
         },
       });
       response.code(201);
       return response;
     } catch (error) {
+      console.log(error);
       if (error instanceof ClientError) {
         const response = h.response({
           status: 'fail',
-          message: error.message,
         });
         response.code(error.statusCode);
         return response;
@@ -43,21 +42,19 @@ class AlbumsHandler {
     }
   }
 
-  async getAlbumByIdHandler(request, h) {
-    const { id } = request.params;
+  async getAllSongsHandler(request, h) {
     try {
-      const album = await this._service.getAlbumById(id);
+      const songs = await this._service.getSongs();
       return {
-        status: 'success',
+        message: 'success',
         data: {
-          album,
+          songs,
         },
       };
     } catch (error) {
       if (error instanceof ClientError) {
         const response = h.response({
           status: 'fail',
-          message: error.message,
         });
         response.code(error.statusCode);
         return response;
@@ -71,16 +68,42 @@ class AlbumsHandler {
     }
   }
 
-  async putAlbumByIdHandler(request, h) {
-    const { payload } = request;
+  async getSongByIdHandler(request, h) {
     const { id } = request.params;
     try {
-      await this._validator.validateAlbumPayload(payload);
-      const { name, year } = payload;
-      await this._service.editAlbumById(id, { name, year });
+      const song = await this._service.getSongById(id);
       return {
         status: 'success',
-        message: 'Album successfuly updated',
+        data: {
+          song,
+        },
+      };
+    } catch (error) {
+      if (error instanceof ClientError) {
+        const response = h.response({
+          status: 'fail',
+        });
+        response.code(error.statusCode);
+        return response;
+      }
+      const response = h.response({
+        status: 'error',
+        message: 'Internal Server Error',
+      });
+      response.code(500);
+      return response;
+    }
+  }
+
+  async putSongByIdHandler(request, h) {
+    const { id } = request.params;
+    const { payload } = request;
+    try {
+      await this._validator.validateSongPayload(payload);
+      await this._service.editSongById(id, payload);
+      return {
+        status: 'success',
+        message: `Song with id ${id} successfuly updated`,
       };
     } catch (error) {
       if (error instanceof ClientError) {
@@ -100,13 +123,13 @@ class AlbumsHandler {
     }
   }
 
-  async deleteAlbumByIdHandler(request, h) {
+  async deleteSongByIdHandler(request, h) {
     const { id } = request.params;
     try {
-      await this._service.deleteAlbumById(id);
+      await this._service.deleteSongById(id);
       return {
         status: 'success',
-        message: `Album with id ${id} successfuly deleted`,
+        message: `Song with id ${id} successfuly deleted`,
       };
     } catch (error) {
       if (error instanceof ClientError) {
@@ -127,4 +150,4 @@ class AlbumsHandler {
   }
 }
 
-module.exports = AlbumsHandler;
+module.exports = SongsHandler;
