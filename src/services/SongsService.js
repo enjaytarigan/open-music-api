@@ -19,8 +19,23 @@ class SongsService {
     return result.rows[0].id;
   }
 
-  async getSongs() {
-    const query = 'SELECT id, title, performer FROM songs';
+  async getSongs({ title, performer }) {
+    let query = 'SELECT id, title, performer FROM songs';
+    const params = [];
+
+    if (title) {
+      params.push(`title = '${title}'`);
+    }
+
+    if (performer) {
+      params.push(`performer = '${performer}'`);
+    }
+
+    if (params.length !== 0) {
+      const condition = params.join(' AND ');
+      query += ` WHERE ${condition}`;
+    }
+    console.log(query);
     const result = await this._pool.query(query);
     const songs = result.rows;
     return songs;
