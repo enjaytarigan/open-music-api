@@ -1,5 +1,3 @@
-const ClientError = require('../../exceptions/ClientError');
-
 class SongsHandler {
   constructor(service, validator) {
     this._service = service;
@@ -13,142 +11,57 @@ class SongsHandler {
 
   async postSongHandler(request, h) {
     const { payload } = request;
-    try {
-      await this._validator.validateSongPayload(payload);
-      const songId = await this._service.addSong(payload);
-      const response = h.response({
-        status: 'success',
-        data: {
-          songId,
-        },
-      });
-      response.code(201);
-      return response;
-    } catch (error) {
-      if (error instanceof ClientError) {
-        const response = h.response({
-          status: 'fail',
-          message: error.message,
-        });
-        response.code(error.statusCode);
-        return response;
-      }
-      const response = h.response({
-        status: 'error',
-        message: 'Internal Server Error',
-      });
-      response.code(500);
-      return response;
-    }
+    await this._validator.validateSongPayload(payload);
+    const songId = await this._service.addSong(payload);
+    const response = h.response({
+      status: 'success',
+      data: {
+        songId,
+      },
+    });
+    response.code(201);
+    return response;
   }
 
   async getAllSongsHandler(request, h) {
-    try {
-      const songs = await this._service.getSongs(request.query);
-      return {
-        status: 'success',
-        data: {
-          songs,
-        },
-      };
-    } catch (error) {
-      if (error instanceof ClientError) {
-        const response = h.response({
-          status: 'fail',
-          message: error.message,
-        });
-        response.code(error.statusCode);
-        return response;
-      }
-      const response = h.response({
-        status: 'error',
-        message: 'Internal Server Error',
-      });
-      response.code(500);
-      return response;
-    }
+    const songs = await this._service.getSongs(request.query);
+    return {
+      status: 'success',
+      data: {
+        songs,
+      },
+    };
   }
 
   async getSongByIdHandler(request, h) {
     const { id } = request.params;
-    try {
-      const song = await this._service.getSongById(id);
-      return {
-        status: 'success',
-        data: {
-          song,
-        },
-      };
-    } catch (error) {
-      if (error instanceof ClientError) {
-        const response = h.response({
-          status: 'fail',
-          message: error.message,
-        });
-        response.code(error.statusCode);
-        return response;
-      }
-      const response = h.response({
-        status: 'error',
-        message: 'Internal Server Error',
-      });
-      response.code(500);
-      return response;
-    }
+    const song = await this._service.getSongById(id);
+    return {
+      status: 'success',
+      data: {
+        song,
+      },
+    };
   }
 
   async putSongByIdHandler(request, h) {
     const { id } = request.params;
     const { payload } = request;
-    try {
-      await this._validator.validateSongPayload(payload);
-      await this._service.editSongById(id, payload);
-      return {
-        status: 'success',
-        message: `Song with id ${id} successfuly updated`,
-      };
-    } catch (error) {
-      if (error instanceof ClientError) {
-        const response = h.response({
-          status: 'fail',
-          message: error.message,
-        });
-        response.code(error.statusCode);
-        return response;
-      }
-      const response = h.response({
-        status: 'error',
-        message: 'Internal Server Error',
-      });
-      response.code(500);
-      return response;
-    }
+    await this._validator.validateSongPayload(payload);
+    await this._service.editSongById(id, payload);
+    return {
+      status: 'success',
+      message: `Song with id ${id} successfuly updated`,
+    };
   }
 
   async deleteSongByIdHandler(request, h) {
     const { id } = request.params;
-    try {
-      await this._service.deleteSongById(id);
-      return {
-        status: 'success',
-        message: `Song with id ${id} successfuly deleted`,
-      };
-    } catch (error) {
-      if (error instanceof ClientError) {
-        const response = h.response({
-          status: 'fail',
-          message: error.message,
-        });
-        response.code(error.statusCode);
-        return response;
-      }
-      const response = h.response({
-        status: 'error',
-        message: 'Internal Server Error',
-      });
-      response.code(500);
-      return response;
-    }
+    await this._service.deleteSongById(id);
+    return {
+      status: 'success',
+      message: `Song with id ${id} successfuly deleted`,
+    };
   }
 }
 
