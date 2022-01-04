@@ -36,8 +36,7 @@ class SongsService {
       query += ` WHERE ${condition}`;
     }
     const result = await this._pool.query(query);
-    const songs = result.rows;
-    return songs;
+    return result.rows;
   }
 
   async getSongById(id) {
@@ -52,8 +51,7 @@ class SongsService {
       throw new NotFoundError('Song not found!');
     }
 
-    const songs = result.rows[0];
-    return songs;
+    return result.rows[0];
   }
 
   async editSongById(id, payload) {
