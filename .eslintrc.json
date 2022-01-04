@@ -12,6 +12,10 @@
     "no-console": "off",
     "no-underscore-dangle": "off",
     "operator-linebreak": "off",
-    "object-curly-newline": "off"
+    "object-curly-newline": "off",
+    "no-unused-vars": [
+      "warn",
+      { "vars": "all", "varsIgnorePattern": "^internals$", "args": "none" }
+    ]
   }
 }
