@@ -79,6 +79,19 @@ class SongsService {
       throw new NotFoundError('Song not found!');
     }
   }
+
+  async verifySongIsExist(id) {
+    const query = {
+      text: 'SELECT title FROM songs WHERE id = $1',
+      values: [id],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (result.rows.length === 0) {
+      throw new NotFoundError('Lagu tidak ditemukan');
+    }
+  }
 }
 
 module.exports = SongsService;
