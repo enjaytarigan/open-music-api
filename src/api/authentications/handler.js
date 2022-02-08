@@ -59,6 +59,7 @@ class AuthenticationsHandler {
     await this._authenticationsService.deleteRefreshToken(refreshToken);
     return {
       status: 'success',
+      message: 'Berhasil menghapus authentication',
     };
   }
 }

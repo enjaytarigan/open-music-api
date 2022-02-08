@@ -25,6 +25,7 @@ const PlaylistSongsValidator = require('./validator/playlistSongs');
 const TokenManager = require('./tokenize/TokenManager');
 const CollaborationsValidator = require('./validator/collaborations');
 const CollaborationsService = require('./services/CollaborationsService');
+const ActivitiesService = require('./services/ActivitiesService');
 
 const main = async () => {
   const albumsService = new AlbumsService();
@@ -34,6 +35,7 @@ const main = async () => {
   const playlistSongsService = new PlaylistSongsService();
   const collaborationsService = new CollaborationsService();
   const playlistsService = new PlaylistsService(collaborationsService);
+  const activitiesService = new ActivitiesService();
   const server = await Hapi.server({
     host: process.env.HOST,
     port: process.env.PORT,
@@ -100,6 +102,7 @@ const main = async () => {
         playlistsService,
         songsService,
         validator: PlaylistSongsValidator,
+        activitiesService,
       },
     },
     {
@@ -115,7 +118,6 @@ const main = async () => {
 
   await server.ext('onPreResponse', (request, h) => {
     const { response } = request;
-    console.log(response);
     if (response instanceof ClientError) {
       const newResponse = h.response({
         status: 'fail',

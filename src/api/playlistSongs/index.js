@@ -6,13 +6,20 @@ module.exports = {
   name: 'playlistSongs',
   register: async (
     server,
-    { playlistSongsService, playlistsService, songsService, validator },
+    {
+      playlistSongsService,
+      playlistsService,
+      songsService,
+      validator,
+      activitiesService,
+    },
   ) => {
     const playlistSongsHandler = new PlaylistSongsHandler(
       playlistSongsService,
       playlistsService,
       songsService,
       validator,
+      activitiesService,
     );
     server.route(routes(playlistSongsHandler));
   },
