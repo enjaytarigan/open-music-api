@@ -32,18 +32,6 @@ exports.up = (pgm) => {
     'fk.playlist_song_activities.playlist_id.playlists.id',
     'FOREIGN KEY(playlist_id) REFERENCES playlists(id) ON DELETE CASCADE',
   );
-
-  pgm.addConstraint(
-    'playlist_song_activities',
-    'fk.playlist_song_activities.user_id.users.id',
-    'FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE',
-  );
-
-  pgm.addConstraint(
-    'playlist_song_activities',
-    'fk.playlist_song_activities.song_id.songs.id',
-    'FOREIGN KEY(song_id) REFERENCES songs(id) ON DELETE CASCADE',
-  );
 };
 
 exports.down = (pgm) => {
