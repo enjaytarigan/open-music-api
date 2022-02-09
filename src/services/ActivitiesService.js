@@ -8,12 +8,11 @@ class ActivitiesService {
 
   async addActivity({ playlistId, songId, userId, action }) {
     const id = `activities-${nanoid(16)}`;
-    const time = new Date();
     const query = {
       text: `INSERT INTO 
-             playlist_song_activities(id, playlist_id, song_id, user_id, action, time) 
-             VALUES($1, $2, $3, $4, $5, $6)`,
-      values: [id, playlistId, songId, userId, action, time],
+             playlist_song_activities(id, playlist_id, song_id, user_id, action) 
+             VALUES($1, $2, $3, $4, $5)`,
+      values: [id, playlistId, songId, userId, action],
     };
 
     await this._pool.query(query);

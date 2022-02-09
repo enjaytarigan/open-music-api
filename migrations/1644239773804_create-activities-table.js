@@ -16,6 +16,7 @@ exports.up = (pgm) => {
     time: {
       type: 'timestamp',
       notNull: true,
+      default: pgm.func('current_timestamp'),
     },
     user_id: {
       type: 'VARCHAR(50)',

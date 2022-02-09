@@ -8,8 +8,7 @@ class AlbumsHandler {
     this.deleteAlbumByIdHandler = this.deleteAlbumByIdHandler.bind(this);
   }
 
-  async postAlbumHandler(request, h) {
-    const { payload } = request;
+  async postAlbumHandler({ payload }, h) {
     await this._validator.validateAlbumPayload(payload);
 
     const albumId = await this._service.addAlbum(payload);
