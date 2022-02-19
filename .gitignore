@@ -1,3 +1,3 @@
 .env
 node_modules
-./src/api/albums/file/
+/src/api/albums/file
