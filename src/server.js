@@ -24,6 +24,7 @@ const CollaborationsService = require('./services/postgre/CollaborationsService'
 const ActivitiesService = require('./services/postgre/ActivitiesService');
 const StorageService = require('./services/storage/StorageService');
 const AlbumLikesService = require('./services/postgre/AlbumLikesService');
+const CacheService = require('./services/redis/CacheServices');
 const ProducerService = require('./services/rabbitmq/ProducerService');
 const AlbumsValidator = require('./validator/albums');
 const SongsValidator = require('./validator/songs');
@@ -34,18 +35,17 @@ const PlaylistSongsValidator = require('./validator/playlistSongs');
 const CollaborationsValidator = require('./validator/collaborations');
 const ExportPlaylistValidator = require('./validator/exports');
 const TokenManager = require('./tokenize/TokenManager');
-const CacheService = require('./services/redis/CacheServices');
 
 const main = async () => {
+  const cacheService = new CacheService();
   const albumsService = new AlbumsService();
   const songsService = new SongsService();
   const usersService = new UsersService();
   const authenticationsService = new AuthenticationsService();
-  const playlistSongsService = new PlaylistSongsService();
-  const collaborationsService = new CollaborationsService();
-  const playlistsService = new PlaylistsService(collaborationsService);
+  const playlistSongsService = new PlaylistSongsService(cacheService);
+  const collaborationsService = new CollaborationsService(cacheService);
+  const playlistsService = new PlaylistsService(collaborationsService, cacheService);
   const activitiesService = new ActivitiesService();
-  const cacheService = new CacheService();
   const storageService = new StorageService(
     path.resolve(__dirname, 'api/albums/file/covers'),
   );
