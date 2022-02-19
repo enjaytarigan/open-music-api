@@ -1,5 +1,5 @@
 const InvariantError = require('../../exceptions/InvariantError');
-const { AlbumPayloadSchema } = require('./schema');
+const { AlbumPayloadSchema, CoverImageHeadersSchema } = require('./schema');
 
 const AlbumsValidator = {
   validateAlbumPayload: (payload) => {
@@ -7,6 +7,14 @@ const AlbumsValidator = {
 
     if (validationPayloadAlbumResult.error) {
       throw new InvariantError(validationPayloadAlbumResult.error.message);
+    }
+  },
+
+  validateCoverImageHeaders: (headers) => {
+    const validationResult = CoverImageHeadersSchema.validate(headers);
+
+    if (validationResult.error) {
+      throw new InvariantError(validationResult.error.message);
     }
   },
 };

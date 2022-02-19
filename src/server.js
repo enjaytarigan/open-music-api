@@ -1,6 +1,8 @@
 require('dotenv').config();
 
+const path = require('path');
 const Hapi = require('@hapi/hapi');
+const Inert = require('@hapi/inert');
 const Jwt = require('@hapi/jwt');
 const albums = require('./api/albums');
 const songs = require('./api/songs');
@@ -19,6 +21,7 @@ const PlaylistsService = require('./services/postgre/PlaylistsService');
 const PlaylistSongsService = require('./services/postgre/PlaylistSongsService');
 const CollaborationsService = require('./services/postgre/CollaborationsService');
 const ActivitiesService = require('./services/postgre/ActivitiesService');
+const StorageService = require('./services/storage/StorageService');
 const ProducerService = require('./services/rabbitmq/ProducerService');
 const AlbumsValidator = require('./validator/albums');
 const SongsValidator = require('./validator/songs');
@@ -39,6 +42,9 @@ const main = async () => {
   const collaborationsService = new CollaborationsService();
   const playlistsService = new PlaylistsService(collaborationsService);
   const activitiesService = new ActivitiesService();
+  const storageService = new StorageService(
+    path.resolve(__dirname, 'api/albums/file/covers'),
+  );
   const server = await Hapi.server({
     host: process.env.HOST,
     port: process.env.PORT,
@@ -49,9 +55,14 @@ const main = async () => {
     },
   });
 
-  await server.register({
-    plugin: Jwt,
-  });
+  await server.register([
+    {
+      plugin: Jwt,
+    },
+    {
+      plugin: Inert,
+    },
+  ]);
 
   await server.auth.strategy('openmusic_jwt', 'jwt', {
     keys: process.env.ACCESS_TOKEN_KEY,
@@ -72,7 +83,11 @@ const main = async () => {
   await server.register([
     {
       plugin: albums,
-      options: { service: albumsService, validator: AlbumsValidator },
+      options: {
+        service: albumsService,
+        validator: AlbumsValidator,
+        storageService,
+      },
     },
     {
       plugin: songs,
