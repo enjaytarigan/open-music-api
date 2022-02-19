@@ -9,6 +9,7 @@ const authentications = require('./api/authentications');
 const playlists = require('./api/playlists');
 const playlistSongs = require('./api/playlistSongs');
 const collaborations = require('./api/collaborations');
+const _exports = require('./api/exports');
 const ClientError = require('./exceptions/ClientError');
 const AlbumsService = require('./services/postgre/AlbumsService');
 const SongsService = require('./services/postgre/SongsService');
@@ -16,16 +17,18 @@ const UsersService = require('./services/postgre/UsersService');
 const AuthenticationsService = require('./services/postgre/AuthenticationsService');
 const PlaylistsService = require('./services/postgre/PlaylistsService');
 const PlaylistSongsService = require('./services/postgre/PlaylistSongsService');
+const CollaborationsService = require('./services/postgre/CollaborationsService');
+const ActivitiesService = require('./services/postgre/ActivitiesService');
+const ProducerService = require('./services/rabbitmq/ProducerService');
 const AlbumsValidator = require('./validator/albums');
 const SongsValidator = require('./validator/songs');
 const UsersValidator = require('./validator/users');
 const AuthenticationsValidator = require('./validator/authentications');
 const PlaylistsValidator = require('./validator/playlists');
 const PlaylistSongsValidator = require('./validator/playlistSongs');
-const TokenManager = require('./tokenize/TokenManager');
 const CollaborationsValidator = require('./validator/collaborations');
-const CollaborationsService = require('./services/postgre/CollaborationsService');
-const ActivitiesService = require('./services/postgre/ActivitiesService');
+const ExportPlaylistValidator = require('./validator/exports');
+const TokenManager = require('./tokenize/TokenManager');
 
 const main = async () => {
   const albumsService = new AlbumsService();
@@ -112,6 +115,14 @@ const main = async () => {
         playlistsService,
         usersService,
         validator: CollaborationsValidator,
+      },
+    },
+    {
+      plugin: _exports,
+      options: {
+        producerService: ProducerService,
+        playlistsService,
+        validator: ExportPlaylistValidator,
       },
     },
   ]);
