@@ -12,6 +12,7 @@ const playlists = require('./api/playlists');
 const playlistSongs = require('./api/playlistSongs');
 const collaborations = require('./api/collaborations');
 const _exports = require('./api/exports');
+const albumLikes = require('./api/albumLikes');
 const ClientError = require('./exceptions/ClientError');
 const AlbumsService = require('./services/postgre/AlbumsService');
 const SongsService = require('./services/postgre/SongsService');
@@ -22,6 +23,7 @@ const PlaylistSongsService = require('./services/postgre/PlaylistSongsService');
 const CollaborationsService = require('./services/postgre/CollaborationsService');
 const ActivitiesService = require('./services/postgre/ActivitiesService');
 const StorageService = require('./services/storage/StorageService');
+const AlbumLikesService = require('./services/postgre/AlbumLikesService');
 const ProducerService = require('./services/rabbitmq/ProducerService');
 const AlbumsValidator = require('./validator/albums');
 const SongsValidator = require('./validator/songs');
@@ -32,6 +34,7 @@ const PlaylistSongsValidator = require('./validator/playlistSongs');
 const CollaborationsValidator = require('./validator/collaborations');
 const ExportPlaylistValidator = require('./validator/exports');
 const TokenManager = require('./tokenize/TokenManager');
+const CacheService = require('./services/redis/CacheServices');
 
 const main = async () => {
   const albumsService = new AlbumsService();
@@ -42,9 +45,11 @@ const main = async () => {
   const collaborationsService = new CollaborationsService();
   const playlistsService = new PlaylistsService(collaborationsService);
   const activitiesService = new ActivitiesService();
+  const cacheService = new CacheService();
   const storageService = new StorageService(
     path.resolve(__dirname, 'api/albums/file/covers'),
   );
+  const albumLikesService = new AlbumLikesService();
   const server = await Hapi.server({
     host: process.env.HOST,
     port: process.env.PORT,
@@ -138,6 +143,14 @@ const main = async () => {
         producerService: ProducerService,
         playlistsService,
         validator: ExportPlaylistValidator,
+      },
+    },
+    {
+      plugin: albumLikes,
+      options: {
+        albumLikesService,
+        albumsService,
+        cacheService,
       },
     },
   ]);
