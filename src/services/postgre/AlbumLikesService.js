@@ -46,9 +46,9 @@ class AlbumLikesService {
       values: [userId, albumId],
     };
 
-    const result = await this._pool.query(query);
+    const { rowCount } = await this._pool.query(query);
 
-    if (result.rows.length !== 0) {
+    if (rowCount !== 0) {
       throw new Error('user already like this album');
     }
   }

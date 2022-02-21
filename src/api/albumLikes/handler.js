@@ -3,13 +3,13 @@ class AlbumLikesHandler {
     this._albumLikesService = albumLikesService;
     this._albumsService = albumsService;
     this._cacheService = cacheService;
-    this.postUserLikeOrUnlikeAlbumByIdHandler =
-      this.postUserLikeOrUnlikeAlbumByIdHandler.bind(this);
+    this.postUpdateLikeAlbumHandler =
+      this.postUpdateLikeAlbumHandler.bind(this);
 
     this.getTotalLikesAlbumByIdHandler = this.getTotalLikesAlbumByIdHandler.bind(this);
   }
 
-  async postUserLikeOrUnlikeAlbumByIdHandler(request, h) {
+  async postUpdateLikeAlbumHandler(request, h) {
     const { id: userId } = request.auth.credentials;
     const { id: albumId } = request.params;
 
