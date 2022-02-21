@@ -1,6 +1,7 @@
 const { nanoid } = require('nanoid');
 const { Pool } = require('pg');
-const NotFoundError = require('../exceptions/NotFoundError');
+const NotFoundError = require('../../exceptions/NotFoundError');
+const { mapDBAlbumToModel } = require('../../utils');
 
 class AlbumsService {
   constructor() {
@@ -20,7 +21,7 @@ class AlbumsService {
 
   async getAlbumById(id) {
     const query = {
-      text: 'SELECT id, name, year FROM albums WHERE id  = $1',
+      text: 'SELECT * FROM albums WHERE id  = $1',
       values: [id],
     };
     const result = await this._pool.query(query);
@@ -35,7 +36,7 @@ class AlbumsService {
     };
     const resultQuerySong = await this._pool.query(querySong);
     const songs = resultQuerySong.rows;
-    const album = result.rows[0];
+    const album = mapDBAlbumToModel(result.rows[0]);
     return { ...album, songs };
   }
 
@@ -62,6 +63,32 @@ class AlbumsService {
 
     if (!result.rowCount) {
       throw new NotFoundError('Album not found!');
+    }
+  }
+
+  async editCoverUrlAlbumById(id, url) {
+    const query = {
+      text: 'UPDATE albums SET cover_url = $1 WHERE id = $2 returning id',
+      values: [url, id],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (result.rows.length === 0) {
+      throw new NotFoundError('Album not found!');
+    }
+  }
+
+  async verifyAlbumIsExist(id) {
+    const query = {
+      text: 'SELECT id FROM albums WHERE id = $1',
+      values: [id],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (result.rows.length === 0) {
+      throw new NotFoundError('Album tidak ditemukan');
     }
   }
 }

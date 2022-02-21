@@ -5,6 +5,7 @@ class PlaylistSongsHandler {
     songsService,
     validator,
     activitiesService,
+    cacheService,
   ) {
     this._playlistSongsService = playlistSongsService;
     this._playlistsService = playlistsService;

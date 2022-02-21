@@ -1,11 +1,12 @@
 const { nanoid } = require('nanoid');
 const { Pool } = require('pg');
-const InvariantError = require('../exceptions/InvariantError');
-const NotFoundError = require('../exceptions/NotFoundError');
+const InvariantError = require('../../exceptions/InvariantError');
+const NotFoundError = require('../../exceptions/NotFoundError');
 
 class CollaborationsService {
-  constructor() {
+  constructor(cacheService) {
     this._pool = new Pool();
+    this._cacheService = cacheService;
   }
 
   async addCollaboration(playlistId, userId) {
@@ -20,7 +21,7 @@ class CollaborationsService {
     if (result.rows.length === 0) {
       throw new InvariantError('Gagal menambahkan user sebagai kolaborator');
     }
-
+    await this._cacheService.delete(`playlist_songs:${playlistId}`);
     return result.rows[0].id;
   }
 
@@ -35,6 +36,7 @@ class CollaborationsService {
     if (result.rowCount === 0) {
       throw new NotFoundError('Gagal menghapus user sebagai kolaborator');
     }
+    await this._cacheService.delete(`playlist_songs:${playlistId}`);
   }
 
   async verifyCollaborator(playlistId, userId) {
