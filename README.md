@@ -1,6 +1,6 @@
 # Open Music API
 
-Belajar Fundamental Aplikasi Back-End | Submission | Dicoding Academy
+[Belajar Fundamental Aplikasi Back-End](https://www.dicoding.com/academies/271) | Submission | Dicoding Academy
 
 ## [API Documentation](APIDocs.md)
 
