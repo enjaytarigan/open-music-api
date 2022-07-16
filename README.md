@@ -704,3 +704,96 @@ Response:
   "status": "fail"
 }
 ```
+
+## Collaboration API
+
+### `POST /collaborations`
+
+Description: Add collaborator to playlist
+
+Headers:
+
+```json
+{
+  "Authorization": "Bearer {accessToken}"
+}
+```
+
+Body Request:
+
+```json
+{
+  "playlistId": "string",
+  "userId": "userId"
+}
+```
+
+Response:
+
+201 - Created
+
+```json
+{
+  "status": "success",
+  "data": {
+    "collaborationId": "string"
+  }
+}
+```
+
+404 - Not Found
+
+```json
+{
+  "status": "fail",
+  "message": "Playlist not found"
+}
+```
+
+404 - Not Found
+
+```json
+{
+  "status": "fail",
+  "message": "User not found"
+}
+```
+
+403 - Forbidden
+
+```json
+{
+  "status": "failed"
+}
+```
+
+### `DELETE /collaborations`
+
+Description: Delete collaborator from playlist
+
+Headers:
+
+```json
+{
+  "Authorization": "Bearer <accessToken>"
+}
+```
+
+Body Request:
+
+```json
+{
+  "playlistId": "string",
+  "userId": "userId"
+}
+```
+
+Response:
+
+200 - OK
+
+```json
+{
+  "status": "success"
+}
+```
