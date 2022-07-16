@@ -436,3 +436,271 @@ Response:
   "message": "<error message>"
 }
 ```
+
+## Playlists API
+
+### `POST /playlists`
+
+Headers
+
+```json
+{
+  "Authorization": "Bearer {accessToken}"
+}
+```
+
+Body Request:
+
+```json
+{
+  "name": "string"
+}
+```
+
+Response:
+
+201 - Created
+
+```json
+{
+  "status": "success",
+  "data": {
+    "playlistId": "string"
+  }
+}
+```
+
+400 - Bad Request
+
+```json
+{
+  "status": "fail",
+  "message": "<error message>"
+}
+```
+
+401 - Unauthorized
+
+```json
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "Missing authentication"
+}
+```
+
+### `GET /playlists`
+
+Headers
+
+```json
+{
+  "Authorization": "Bearer {accessToken}"
+}
+```
+
+Body Request: -
+
+Response:
+
+200 - OK
+
+```json
+{
+  "status": "success",
+  "data": {
+    "playlists": [
+      {
+        "id": "string",
+        "name": "string",
+        "username": "string"
+      },
+      {
+        "id": "string",
+        "name": "string",
+        "username": "string"
+      }
+    ]
+  }
+}
+```
+
+### `DELETE /playlists/{playlistId}`
+
+Headers
+
+```json
+{
+  "Authorization": "Bearer {accessToken}"
+}
+```
+
+Body Request: -
+
+Response:
+
+200 - OK
+
+```json
+{
+  "status": "success"
+}
+```
+
+404 - Not Found
+
+```json
+{
+  "status": "fail",
+  "message": "Playlist not found"
+}
+```
+
+403 - Forbidden
+
+```json
+{
+  "status": "fail",
+  "message": "<error message>"
+}
+```
+
+### `POST /playlists/{playlistId}/songs`
+
+Description: add song to playlist
+
+Headers
+
+```json
+{
+  "Authorization": "Bearer {accessToken}"
+}
+```
+
+Body Request:
+
+```json
+{
+  "songId": "string"
+}
+```
+
+Response:
+
+201 - Created
+
+```json
+{
+  "status": "success"
+}
+```
+
+400 - Bad Request
+
+```json
+{
+  "status": "fail",
+  "message": "<error message>"
+}
+```
+
+404 - Not Found
+
+```json
+{
+  "status": "fail",
+  "message": "playlist not found"
+}
+```
+
+403 - Forbidden
+
+```json
+{
+  "status": "fail"
+}
+```
+
+### `GET /playlists/{playlistId}/songs`
+
+Description: Get all songs in playlist
+
+Headers:
+
+```json
+{
+  "Authorization": "Bearer {accessToken}"
+}
+```
+
+Body Request: -
+
+Response:
+
+200 - OK
+
+```json
+{
+  "status": "success",
+  "data": {
+    "playlist": {
+      "id": "string",
+      "name": "string",
+      "username": "string",
+      "songs": [
+        {
+          "id": "string",
+          "title": "string",
+          "performer": "string"
+        }
+      ]
+    }
+  }
+}
+```
+
+403 - Forbidden
+
+```json
+{
+  "status": "fail"
+}
+```
+
+### `DELETE /playlists/{playlistId}/songs`
+
+Description: Delete song from playlist
+
+Headers:
+
+```json
+{
+  "Authorization": "Bearer {accessToken}"
+}
+```
+
+Body Request:
+
+```json
+{
+  "songId": "string"
+}
+```
+
+Response:
+
+200 - OK
+
+```json
+{
+  "status": "success"
+}
+```
+
+403 - Forbidden
+
+```json
+{
+  "status": "fail"
+}
+```
