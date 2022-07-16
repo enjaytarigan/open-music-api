@@ -1,3 +1,14 @@
 # Open Music API
 
-Submission Kelas Belajar Fundamental Aplikasi Back-End | Dicoding Academy
+Belajar Fundamental Aplikasi Back-End | Submission | Dicoding Academy
+
+## [API Documentation](APIDocs.md)
+
+## Tech Stack
+
+- Hapi JS
+- PostgreSQL
+- Redis
+- Rabbit MQ
+- JWT
+- Nodemailer
