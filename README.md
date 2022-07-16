@@ -303,3 +303,136 @@ Response:
   "message": "Song not found"
 }
 ```
+
+## Register User API
+
+### `POST /users`
+
+Body Request:
+
+```json
+{
+  "username": "string",
+  "password": "string",
+  "fullname": "string"
+}
+```
+
+Response:
+
+201 - Created
+
+```json
+{
+  "status": "success",
+  "data": {
+    "userId": "string"
+  }
+}
+```
+
+400 - Bad Request
+
+```json
+{
+  "status": "fail",
+  "message": "<error message>"
+}
+```
+
+## Authentication API
+
+### `POST /authentications`
+
+Body Request:
+
+```json
+{
+  "username": "string",
+  "password": "string"
+}
+```
+
+Response:
+
+201 - Created
+
+```json
+{
+  "status": "success",
+  "data": {
+    "accessToken": "token",
+    "refreshToken": "token"
+  }
+}
+```
+
+400 - Bad Request
+
+```json
+{
+  "status": "fail",
+  "message": "<error message>"
+}
+```
+
+### `PUT /authentications`
+
+Body Request:
+
+```json
+{
+  "refershToken": "token"
+}
+```
+
+Response:
+
+200 - OK
+
+```json
+{
+  "status": "success",
+  "data": {
+    "accessToken": "token"
+  }
+}
+```
+
+400 - Bad Request
+
+```json
+{
+  "status": "fail",
+  "message": "<error message>"
+}
+```
+
+### `DELETE /authentications`
+
+Body Request:
+
+```json
+{
+  "refershToken": "token"
+}
+```
+
+Response:
+
+200 - OK
+
+```json
+{
+  "status": "success"
+}
+```
+
+400 - Bad Request
+
+```json
+{
+  "status": "fail",
+  "message": "<error message>"
+}
+```
